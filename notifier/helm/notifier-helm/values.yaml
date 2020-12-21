@@ -1,0 +1,51 @@
+server_port: 3000
+
+imageCredentials:
+  dockerconfig: <base64_dockerconfig>
+  username: <docker_username>
+  password: <docker_password>
+  email: <docker_email>
+  registry: https://index.docker.io/v1/
+
+spec:
+  imageName: <image_name>
+  appName: notifier
+  replicaCount: 3
+  progressDeadlineSeconds: 60
+  minReadySeconds: 30
+  strategy:
+    maxSurge: 1
+    maxUnavailable: 0
+    type: RollingUpdate
+
+rdsdata:
+  db_host: <rds_endpoint>
+  db_name: <rds_instance_name>
+  db_user: <rds_user>
+  db_password: <rds_password>
+
+initialDelaySeconds: 15
+periodSeconds: 30
+
+serviceAccount:
+  name: notifier-sa
+
+rbac:
+  create: true
+
+role:
+  name: notifier-role
+
+roleBinding:
+  name: notifier-rb
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 2
+  averageUtilization: 5
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

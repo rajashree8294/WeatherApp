@@ -1,0 +1,43 @@
+---
+# tasks file for installation
+- name: Update apt cache
+  raw: sudo apt update -y
+
+- name: Install java
+  raw: sudo apt install default-jre -y
+
+- name: Install jdk
+  raw: sudo apt install default-jdk -y
+
+- name: Install Jenkins Step 1
+  raw: wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+
+- name: Install Jenkins Step 2
+  raw: sudo apt-add-repository "deb http://pkg.jenkins-ci.org/debian binary/"
+
+- name: Install Jenkins
+  raw: sudo apt install jenkins -y
+
+- name: Add apt repository
+  raw: sudo add-apt-repository ppa:certbot/certbot -y
+
+- name: Install nginx and certbot
+  raw: sudo apt install -y nginx python-certbot-nginx
+
+- name: Copy default file to nginx
+  become: yes
+  copy:
+    src: "{{ default_file_path }}"
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0766'
+
+- name: Nginx config change
+  raw: sudo nginx -t
+
+- name: Restart Nginx
+  raw: sudo systemctl restart nginx
+
+- name: Configure certbot to install certificate for your domain
+  shell: "sudo certbot --nginx --noninteractive --agree-tos --email {{email_id}} -d {{sub_domain_name}}"

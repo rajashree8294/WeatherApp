@@ -1,0 +1,3 @@
+---
+# vars file for networking
+ec2_instance_type: t2.medium

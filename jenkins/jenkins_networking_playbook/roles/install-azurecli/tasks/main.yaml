@@ -1,0 +1,21 @@
+- name: Install aptitude using apt
+  become: yes
+  apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+- name: Install required system packages
+  become: yes
+  apt: name={{ item }} state=latest update_cache=yes
+  loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'lsb-release', 'python3-pip', 'gnupg']
+
+- name: Download and install the Microsoft signing key
+  raw:  curl -sL https://packages.microsoft.com/keys/microsoft.asc |
+            gpg --dearmor |
+            sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+
+- name: Add the Azure CLI software repository
+  raw: AZ_REPO=$(lsb_release -cs) && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |
+       sudo tee /etc/apt/sources.list.d/azure-cli.list
+
+- name: Update repository information and install the azure-cli package
+  become: yes
+  apt: update_cache=yes name=azure-cli state=latest

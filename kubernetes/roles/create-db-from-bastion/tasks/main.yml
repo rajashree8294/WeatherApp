@@ -1,0 +1,51 @@
+---
+# tasks file for installation
+- name: Update apt cache
+  raw: sudo apt update -y
+
+- name: Install mysql-client
+  raw: sudo apt install mysql-client -y
+
+- name: Install dependencies
+  become: true
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-setuptools
+    state: latest
+    update_cache: True
+    
+- name: Install boto3 and botocore with pip3 module
+  become: true
+  pip:
+    name: 
+    - boto3
+    - botocore
+    - pymysql
+    state: present
+
+- debug:
+    var: hostvars['localhost']['rds_endpoint_address']
+
+- name: Create a new database with name 'poller'
+  mysql_db:
+    name: "{{ poller_db_name }}"
+    login_host: "{{ hostvars['localhost']['rds_endpoint_address'] }}"
+    login_user: "{{ db_username }}"
+    login_password: "{{ db_password }}"
+    state: present
+
+- name: Create a new database with name 'notifier'
+  mysql_db:
+    name: "{{ notifier_db_name }}"
+    login_host: "{{ hostvars['localhost']['rds_endpoint_address'] }}"
+    login_user: "{{ db_username }}"
+    login_password: "{{ db_password }}"
+    state: present
+
+# - name: Connect MySQL and create poller and notifier databases
+#   raw: "mysql -u {{ db_username }} -p'{{ db_password }}' -h {{ hostvars['localhost']['ansible_facts']['rds_endpoint_address'] }} -P 3306"
+
+# - name: Connect MySQL and create poller and notifier databases
+#   raw: "mysql -u {{ db_username }} -p'{{ db_password }}' -h {{ hostvars['localhost']['ansible_facts']['rds_endpoint_address'] }} -P 3306"

@@ -1,0 +1,6 @@
+---
+## Install Kubectl
+- hosts: localhost
+  connection: local
+  roles:
+    - install-kubectl

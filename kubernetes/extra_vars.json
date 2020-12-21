@@ -1,0 +1,11 @@
+{
+    "aws_profile":"{{ env.AWS_PROFILE }}",
+    "aws_region":"{{ env.AWS_REGION }}",
+    "kops_cluster_name":"{{ env.KOPS_CLUSTER_NAME }}",
+    "kops_state_store":"{{ env.KOPS_STATE_STORE }}",
+    "dns_zone": "{{ env.DNS_ZONE }}",
+    "ssh_private_key":"{{ env.SSH_PRIVATE_KEY }}",
+    "metrics_server_file_path":"{{ env.METRICS_SERVER_FILE_PATH }}",
+    "email":"{{ env.SUB_DOMAIN_NAME }}",
+    "sub_domain_name": "{{ env.EMAIL }}"
+}

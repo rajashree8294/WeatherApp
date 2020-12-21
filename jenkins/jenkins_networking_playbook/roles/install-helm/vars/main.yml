@@ -1,0 +1,4 @@
+---
+
+helm_version: "v3.3.4"
+helm_download_path: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"

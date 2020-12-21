@@ -1,0 +1,10 @@
+# Shell scripts with sensitive info
+*.sh
+/.idea/
+/cluster-autoscaler-one-asg.yaml
+
+/tmp/values.yml
+/tmp/updateIG.yml
+
+/tmp/igConfig.yml
+/tmp/updateIG1.yml

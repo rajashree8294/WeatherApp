@@ -1,0 +1,9 @@
+hank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To install the chart with the release name kafka in the kafka namespace:
+
+    1. helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+    2. kubectl create ns kafka
+    3. helm install kafka --namespace kafka incubator/kafka -f helm/values.yaml

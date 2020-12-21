@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifier-deployment
+  labels:
+    app: {{ .Values.spec.appName }}
+spec:
+  replicas: {{ .Values.spec.replicaCount }}
+  progressDeadlineSeconds: {{ .Values.spec.progressDeadlineSeconds }}
+  minReadySeconds: {{ .Values.spec.minReadySeconds }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.spec.strategy.maxSurge }}
+      maxUnavailable: {{ .Values.spec.strategy.maxUnavailable }}
+    type: {{ .Values.spec.strategy.type }}
+  selector:
+    matchLabels:
+      app: {{ .Values.spec.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.spec.appName }}
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '3000'
+    spec:
+      containers:
+        - name: {{ .Values.spec.appName }}
+          image: {{ .Values.spec.imageName }}
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: server_port
+                  name: rds-config-notifier
+            - name: DBHost
+              valueFrom:
+                configMapKeyRef:
+                  name: rds-config-notifier
+                  key: db_host
+            - name: DBName
+              valueFrom:
+                configMapKeyRef:
+                  name: rds-config-notifier
+                  key: db_name
+            - name: DBUser
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret-notifier
+                  key: db_user
+            - name: DBPassword
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret-notifier
+                  key: db_password
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: 3000
+              path: /health
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            periodSeconds: {{ .Values.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /health
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+            periodSeconds: {{ .Values.periodSeconds }}
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128M"
+            limits:
+              cpu: "1000m"
+              memory: "512M"
+      imagePullSecrets:
+        - name: dockerregistrykeynotifier

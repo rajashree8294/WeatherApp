@@ -1,0 +1,79 @@
+repositories:
+
+- name: stable
+  url: https://charts.helm.sh/stable  # Helm stable charts (some are depricated to below mentioned are official repos)
+
+- name: incubator
+  url: https://charts.helm.sh/incubator  # Kafka
+
+- name: elastic
+  url: https://helm.elastic.co  # Elasticsearch, Kibana
+
+- name: kokuwa
+  url: https://kokuwaio.github.io/helm-charts # Fluentd Elasticsearch
+
+- name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts # Prometheus, Alertmanager
+
+- name: grafana
+  url: https://grafana.github.io/helm-charts # Grafana
+
+environments:
+  dev:
+  test:
+  prod:
+  gke:
+
+releases:
+  # Published chart example
+  - name: kafka                             # name of this release
+    chart: incubator/kafka                  # the chart being installed to create this release, referenced by `repository/chart` syntax
+    # Values files used for rendering the chart
+    values:
+      # Value files passed via --values
+      # Prometheus-exporter is built in and parameters can be changed from this file
+      - pre-req/kafka-values.yaml
+    # recreatePods: true
+  
+  - name: elasticsearch
+    chart: elastic/elasticsearch
+    values:
+      - pre-req/elasticsearch-values-{{ .Environment.Name }}.yml
+  
+  - name: kibana
+    chart: elastic/kibana
+    values:
+      - pre-req/kibana-values.yml
+
+  - name: fluentd
+    chart: kokuwa/fluentd-elasticsearch
+    values:
+      - pre-req/fluentd-values.yml
+
+  - name: prometheus
+    chart: prometheus-community/prometheus
+    values:
+      - pre-req/prometheus-values-{{ .Environment.Name }}.yml
+    # recreatePods: true
+
+  - name: grafana
+    chart: grafana/grafana
+    values:
+      - pre-req/grafana-values.yml
+
+  - name: prometheus-elasticsearch-exporter
+    chart: prometheus-community/prometheus-elasticsearch-exporter
+    values:
+      - pre-req/prometheus-elasticsearch-exporter-values.yml
+    # recreatePods: true
+
+  # - name: prometheus-adapter
+  #   chart: prometheus-community/prometheus-adapter
+  #   values:
+  #     - pre-req/prometheus-adapter-values.yml
+
+  # - name: kafka-exporter
+  #   chart: ./kafka-exporter
+    # values:
+    # - "./kafka-exporter/values.yaml"
+    # recreatePods: true

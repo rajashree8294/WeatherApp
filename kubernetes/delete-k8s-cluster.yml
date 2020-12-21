@@ -1,0 +1,8 @@
+---
+## Delete cluster with kops
+
+- hosts: localhost
+  connection: local
+  roles:
+    - networking_teardown
+    - delete-cluster

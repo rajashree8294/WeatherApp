@@ -1,0 +1,16 @@
+elasticsearch:
+  hosts: ["elasticsearch-master.default.svc.cluster.local:9200"]
+
+configMaps:
+  useDefaults:
+    systemInputConf: false
+    forward.input.conf: false
+    monitoring.conf: false
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 200Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi

@@ -1,0 +1,18 @@
+---
+## Install Helmfile tasks
+
+- name: Check if Helmfile already installed
+  stat:
+    path: /usr/local/bin/helmfile
+  register: helmfile
+
+- name: Download Helmfile binary
+  get_url:
+    url: "{{ helmfile_download_path }}"
+    dest: /usr/local/bin/helmfile
+    owner: root
+    group: root
+    mode: 0755
+    force: yes
+  become: true
+  when: helmfile.stat.exists == false

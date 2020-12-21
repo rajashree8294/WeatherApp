@@ -1,0 +1,4 @@
+---
+# defaults file for installation
+domain_name: "example.me"
+sub_domain_name: "jenkins.example.me"

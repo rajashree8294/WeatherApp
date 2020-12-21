@@ -1,0 +1,4 @@
+---
+# vars file for installation
+email_id: "test"
+default_file_path: "test_path"

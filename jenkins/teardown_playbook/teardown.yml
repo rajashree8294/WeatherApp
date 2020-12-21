@@ -1,0 +1,11 @@
+---
+- name: Teardown Infrastructure
+  hosts: localhost
+  vars_prompt:
+    - name: aws_root
+      prompt: "AWS ROOT PROFILE NAME"
+      default: ROOT
+      private: no
+  roles:
+    - { role: 'roles/jenkins_teardown', aws_profile: '{{ aws_root }}' }
+

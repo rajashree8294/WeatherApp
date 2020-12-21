@@ -1,0 +1,6 @@
+---
+## Generate SSH key pair. It will create new keypair if does not exist
+- hosts: localhost
+  connection: local
+  roles:
+    - generate-ssh-key-pair

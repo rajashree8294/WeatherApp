@@ -1,0 +1,4 @@
+---
+
+helmfile_version: "v0.133.0"
+helmfile_download_path: "https://github.com/roboll/helmfile/releases/download/{{ helmfile_version }}/helmfile_linux_amd64"
